@@ -8,23 +8,23 @@ import com.ars.domain.Airline;
 import com.ars.domain.Ticket;
 import com.ars.menu.HomePage;
 
-public class DepartAirportHandler extends CommonView
+public class DepartAirportView extends CommonView
 {
     
     private Ticket ticket = new Ticket();
     
-    private static DepartAirportHandler instance;
+    private static DepartAirportView instance;
     
-    private DepartAirportHandler()
+    private DepartAirportView()
     {
     }
     
-    public static DepartAirportHandler getInstance()
+    public static DepartAirportView getInstance()
     {
         
         if (instance == null)
         {
-            instance = new DepartAirportHandler();
+            instance = new DepartAirportView();
             
         }
         return instance;
@@ -67,7 +67,7 @@ public class DepartAirportHandler extends CommonView
         else
         {
             ticket.setDepartAirport(getSetItem(departAirportSet, Integer.parseInt(input)));
-            this.setSuccessor(new ArrivalAirportHandler());
+            this.setSuccessor(new ArrivalAirportView());
             return;
         }
     }

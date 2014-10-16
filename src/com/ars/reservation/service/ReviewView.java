@@ -4,7 +4,7 @@ import com.ars.common.util.IOUtils;
 import com.ars.domain.Ticket;
 import com.ars.menu.HomePage;
 
-public class ReviewHandler extends CommonView
+public class ReviewView extends CommonView
 {
     private Ticket ticket = new Ticket();
     

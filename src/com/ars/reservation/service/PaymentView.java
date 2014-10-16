@@ -12,7 +12,7 @@ import com.ars.discount.impl.DepartAfterReserveStrategy;
 import com.ars.discount.impl.MorningFlightStrategy;
 import com.ars.domain.Ticket;
 
-public class PaymentHandler extends CommonView
+public class PaymentView extends CommonView
 {
     private Ticket ticket = new Ticket();
     
@@ -36,7 +36,7 @@ public class PaymentHandler extends CommonView
         String input = IOUtils.inputString();
         if (input.equalsIgnoreCase(PREVIOUS))
         {
-            this.setSuccessor(new SeatClassHandler());
+            this.setSuccessor(new SeatClassView());
             return;
         }
         else if (input.equalsIgnoreCase(QUIT))
@@ -63,7 +63,7 @@ public class PaymentHandler extends CommonView
                 ticket.setReserveNumber(getReservationNumber());
                 ticket.setTotalMoney(ticket.calculateNormalPrice());
                 ticket.setPromotionPrice(calculatePromotionPrice());
-                this.setSuccessor(new ReviewHandler());
+                this.setSuccessor(new ReviewView());
                 return;
             }
         }

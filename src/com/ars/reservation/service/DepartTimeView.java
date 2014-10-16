@@ -7,42 +7,42 @@ import com.ars.common.util.IOUtils;
 import com.ars.domain.Airline;
 import com.ars.domain.Ticket;
 
-public class ArrivalAirportHandler extends CommonView
+public class DepartTimeView extends CommonView
 {
-    private Ticket ticket = new Ticket();
     
-    public ArrivalAirportHandler()
-    {
-    }
+    private Ticket ticket = new Ticket();
     
     @Override
     protected void handleRequest(Ticket ticket)
     {
         this.ticket = ticket;
-        Set<String> arrivalAirportSet = selectArrivalAirport();
-        inputArrivalAirport(arrivalAirportSet);
+        Set<String> departTimeSet = selectDepartTime();
+        inputDepartTime(departTimeSet);
         this.successor.handleRequest(this.ticket);
     }
     
-    private Set<String> selectArrivalAirport()
+    private Set<String> selectDepartTime()
     {
         Set<String> arrivalAirportSet = new LinkedHashSet<String>();
         for (Airline airlineInfo : airlineInfos)
         {
-            arrivalAirportSet.add(airlineInfo.getArrivalAirport());
+            if (airlineInfo.getDepartAirport().equals(ticket.getDepartAirport())
+                && airlineInfo.getArrivalAirport().equals(ticket.getArrivalAirport()))
+            {
+                arrivalAirportSet.add(airlineInfo.getDepartTime());
+            }
         }
-        printTipInfo(arrivalAirportSet, "Arrival Airport");
-        
+        printTipInfo(arrivalAirportSet, "Depart Time");
         return arrivalAirportSet;
     }
     
-    private void inputArrivalAirport(Set<String> arrivalAirportSet)
+    private void inputDepartTime(Set<String> departTimeSet)
     {
         IOUtils.inputTip();
         String input = IOUtils.inputString();
         if (input.equalsIgnoreCase(PREVIOUS))
         {
-            this.setSuccessor(DepartAirportHandler.getInstance());
+            this.setSuccessor(new DepartDateView());
             return;
         }
         else if (input.equalsIgnoreCase(QUIT))
@@ -52,18 +52,18 @@ public class ArrivalAirportHandler extends CommonView
         if (!input.matches("\\d"))
         {
             println("ERROR!!! Wrong Input. Select Again");
-            inputArrivalAirport(arrivalAirportSet);
+            inputDepartTime(departTimeSet);
         }
         else
         {
-            String setItem = getSetItem(arrivalAirportSet, Integer.parseInt(input));
+            String setItem = getSetItem(departTimeSet, Integer.parseInt(input));
             if (setItem.equals(ticket.getDepartAirport()))
             {
                 println("ERROR!!! Can��t select the same airport as Departure.");
-                inputArrivalAirport(arrivalAirportSet);
+                inputDepartTime(departTimeSet);
             }
-            ticket.setArrivalAirport(setItem);
-            this.setSuccessor(new DepartDateHandler());
+            ticket.setDepartTime(setItem);
+            this.setSuccessor(new PassengerView());
             return;
         }
     }

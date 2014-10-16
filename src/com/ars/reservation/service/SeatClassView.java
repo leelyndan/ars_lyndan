@@ -8,7 +8,7 @@ import com.ars.common.util.IOUtils;
 import com.ars.domain.Airline;
 import com.ars.domain.Ticket;
 
-public class SeatClassHandler extends CommonView
+public class SeatClassView extends CommonView
 {
     private Ticket ticket = new Ticket();
     
@@ -53,7 +53,7 @@ public class SeatClassHandler extends CommonView
         String inputString = IOUtils.inputString();
         if (PREVIOUS.equals(inputString))
         {
-            this.setSuccessor(new PassengerHandler());
+            this.setSuccessor(new PassengerView());
             return;
         }
         else if (QUIT.equals(inputString))
@@ -67,7 +67,7 @@ public class SeatClassHandler extends CommonView
                 Double price = getSeatPriceMap(selectedFlight).get(inputString);
                 ticket.setPrice(price);
                 ticket.setSeatClass(getSeatClassMap().get(inputString));
-                this.setSuccessor(new PaymentHandler());
+                this.setSuccessor(new PaymentView());
                 return;
             }
             else

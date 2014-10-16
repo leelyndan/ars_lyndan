@@ -7,7 +7,7 @@ import com.ars.domain.Airline;
 import com.ars.domain.Passenger;
 import com.ars.domain.Ticket;
 
-public class PassengerHandler extends CommonView
+public class PassengerView extends CommonView
 {
     private static final String ADULT = "Adult";
     
@@ -45,7 +45,7 @@ public class PassengerHandler extends CommonView
         String input = IOUtils.inputString();
         if (PREVIOUS.equalsIgnoreCase(input))
         {
-            this.setSuccessor(new DepartTimeHandler());
+            this.setSuccessor(new DepartTimeView());
         }
         else if (QUIT.equalsIgnoreCase(input))
         {
@@ -88,7 +88,7 @@ public class PassengerHandler extends CommonView
                 println("ERROR!!! You have to input more than 0.");
                 selectPassengers();
             }
-            this.setSuccessor(new SeatClassHandler());
+            this.setSuccessor(new SeatClassView());
         }
     }
     

@@ -6,7 +6,7 @@ import com.ars.common.util.DateUtils;
 import com.ars.common.util.IOUtils;
 import com.ars.domain.Ticket;
 
-public class DepartDateHandler extends CommonView
+public class DepartDateView extends CommonView
 {
     private Ticket ticket = new Ticket();
     
@@ -37,7 +37,7 @@ public class DepartDateHandler extends CommonView
         String inputedDate = IOUtils.inputString();
         if (PREVIOUS.equalsIgnoreCase(inputedDate))
         {
-            this.setSuccessor(new ArrivalAirportHandler());
+            this.setSuccessor(new ArrivalAirportView());
         }
         else if (QUIT.equalsIgnoreCase(inputedDate))
         {
@@ -56,7 +56,7 @@ public class DepartDateHandler extends CommonView
                 inputDepartDate();
             }
             ticket.setDepartDate(inputedDate);
-            this.setSuccessor(new DepartTimeHandler());
+            this.setSuccessor(new DepartTimeView());
         }
         else
         {

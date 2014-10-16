@@ -1,5 +1,6 @@
 package com.ars.common.util;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -7,8 +8,21 @@ public class IOUtils
 {
     public static String inputString()
     {
-        Scanner scanner = new Scanner(System.in);
-        return scanner.next();
+        Scanner scanner = null;
+        try
+        {
+            scanner = new Scanner(System.in);
+            return scanner.next();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            closeStream(scanner);
+        }
+        return StringUtils.EMPTY;
     }
     
     public static void print(String str)
@@ -51,6 +65,24 @@ public class IOUtils
         catch (IOException e)
         {
             e.printStackTrace();
+        }
+    }
+    
+    public static void closeStream(Closeable... closeables)
+    {
+        for (Closeable closeable : closeables)
+        {
+            if (null != closeable)
+            {
+                try
+                {
+                    closeable.close();
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }
