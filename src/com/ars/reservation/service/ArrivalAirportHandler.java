@@ -7,26 +7,14 @@ import com.ars.common.util.IOUtils;
 import com.ars.domain.Airline;
 import com.ars.domain.Ticket;
 
-public class ArrivalAirportHandler extends Handler
+public class ArrivalAirportHandler extends CommonView
 {
     private Ticket ticket = new Ticket();
-    private static ArrivalAirportHandler instance;
-
-    private ArrivalAirportHandler()
+    
+    public ArrivalAirportHandler()
     {
     }
-
-    public static ArrivalAirportHandler getInstance()
-    {
-
-        if (instance == null)
-        {
-            instance = new ArrivalAirportHandler();
-
-        }
-        return instance;
-    }
-
+    
     @Override
     protected void handleRequest(Ticket ticket)
     {
@@ -35,7 +23,7 @@ public class ArrivalAirportHandler extends Handler
         inputArrivalAirport(arrivalAirportSet);
         this.successor.handleRequest(this.ticket);
     }
-
+    
     private Set<String> selectArrivalAirport()
     {
         Set<String> arrivalAirportSet = new LinkedHashSet<String>();
@@ -44,10 +32,10 @@ public class ArrivalAirportHandler extends Handler
             arrivalAirportSet.add(airlineInfo.getArrivalAirport());
         }
         printTipInfo(arrivalAirportSet, "Arrival Airport");
-
+        
         return arrivalAirportSet;
     }
-
+    
     private void inputArrivalAirport(Set<String> arrivalAirportSet)
     {
         IOUtils.inputTip();
@@ -68,15 +56,14 @@ public class ArrivalAirportHandler extends Handler
         }
         else
         {
-            String setItem = getSetItem(arrivalAirportSet,
-                    Integer.parseInt(input));
+            String setItem = getSetItem(arrivalAirportSet, Integer.parseInt(input));
             if (setItem.equals(ticket.getDepartAirport()))
             {
-                println("ERROR!!! Can¡¯t select the same airport as Departure.");
+                println("ERROR!!! Canï¿½ï¿½t select the same airport as Departure.");
                 inputArrivalAirport(arrivalAirportSet);
             }
             ticket.setArrivalAirport(setItem);
-            this.setSuccessor(DepartDateHandler.getInstance());
+            this.setSuccessor(new DepartDateHandler());
             return;
         }
     }

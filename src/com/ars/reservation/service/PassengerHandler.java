@@ -7,28 +7,14 @@ import com.ars.domain.Airline;
 import com.ars.domain.Passenger;
 import com.ars.domain.Ticket;
 
-public class PassengerHandler extends Handler
+public class PassengerHandler extends CommonView
 {
-    private static PassengerHandler instance;
     private static final String ADULT = "Adult";
+    
     private static final String CHILD = "Child";
+    
     private Ticket ticket = new Ticket();
-
-    private PassengerHandler()
-    {
-    }
-
-    public static PassengerHandler getInstance()
-    {
-
-        if (instance == null)
-        {
-            instance = new PassengerHandler();
-
-        }
-        return instance;
-    }
-
+    
     @Override
     protected void handleRequest(Ticket ticket)
     {
@@ -36,7 +22,7 @@ public class PassengerHandler extends Handler
         selectPassengers();
         this.successor.handleRequest(this.ticket);
     }
-
+    
     private void selectPassengers()
     {
         showPassenger(ADULT);
@@ -44,22 +30,22 @@ public class PassengerHandler extends Handler
         showPassenger(CHILD);
         inputPassenger(airlineInfos, CHILD);
     }
-
+    
     private void showPassenger(String type)
     {
         printTitle("Passenger");
         println("Please, Input the number of " + type + ".(0 ~ 10)");
         IOUtils.printControlMenu();
-
+        
     }
-
+    
     private void inputPassenger(List<Airline> airlineInfos, String type)
     {
         IOUtils.inputTip();
         String input = IOUtils.inputString();
         if (PREVIOUS.equalsIgnoreCase(input))
         {
-            this.setSuccessor(DepartTimeHandler.getInstance());
+            this.setSuccessor(new DepartTimeHandler());
         }
         else if (QUIT.equalsIgnoreCase(input))
         {
@@ -75,9 +61,9 @@ public class PassengerHandler extends Handler
             addPassenger(type, input);
             checkPassengerNumber(airlineInfos, type);
         }
-
+        
     }
-
+    
     private void addPassenger(String type, String input)
     {
         if (ADULT.equals(type))
@@ -91,10 +77,10 @@ public class PassengerHandler extends Handler
             ticket.getPassengerList().add(Passenger.CHILD);
         }
     }
-
+    
     private void checkPassengerNumber(List<Airline> airlineInfos, String type)
     {
-
+        
         if (CHILD.equals(type))
         {
             if (calculatePassengerAmount() <= 0)
@@ -102,15 +88,15 @@ public class PassengerHandler extends Handler
                 println("ERROR!!! You have to input more than 0.");
                 selectPassengers();
             }
-            this.setSuccessor(SeatClassHandler.getInstance());
+            this.setSuccessor(new SeatClassHandler());
         }
     }
-
+    
     private int calculatePassengerAmount()
     {
         return getPassengerNumber(0) + getPassengerNumber(1);
     }
-
+    
     private int getPassengerNumber(int type)
     {
         return ticket.getPassengerList().get(type).getNumber();

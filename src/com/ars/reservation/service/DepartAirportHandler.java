@@ -8,33 +8,34 @@ import com.ars.domain.Airline;
 import com.ars.domain.Ticket;
 import com.ars.menu.HomePage;
 
-public class DepartAirportHandler extends Handler
+public class DepartAirportHandler extends CommonView
 {
-   
+    
     private Ticket ticket = new Ticket();
+    
     private static DepartAirportHandler instance;
-
+    
     private DepartAirportHandler()
     {
     }
-
+    
     public static DepartAirportHandler getInstance()
     {
-
+        
         if (instance == null)
         {
             instance = new DepartAirportHandler();
-
+            
         }
         return instance;
     }
-
+    
     public void showDepartAirport()
     {
         Set<String> departAirportSet = selectDepartAirport();
         inputDepartAirport(departAirportSet);
     }
-
+    
     private Set<String> selectDepartAirport()
     {
         Set<String> departAirportSet = new LinkedHashSet<String>();
@@ -45,7 +46,7 @@ public class DepartAirportHandler extends Handler
         printTipInfo(departAirportSet, "Departure Airport");
         return departAirportSet;
     }
-
+    
     private void inputDepartAirport(Set<String> departAirportSet)
     {
         IOUtils.inputTip();
@@ -65,13 +66,12 @@ public class DepartAirportHandler extends Handler
         }
         else
         {
-            ticket.setDepartAirport(getSetItem(departAirportSet,
-                    Integer.parseInt(input)));
-            this.setSuccessor(ArrivalAirportHandler.getInstance());
+            ticket.setDepartAirport(getSetItem(departAirportSet, Integer.parseInt(input)));
+            this.setSuccessor(new ArrivalAirportHandler());
             return;
         }
     }
-
+    
     @Override
     public void handleRequest(Ticket ticket)
     {

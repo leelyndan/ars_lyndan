@@ -12,26 +12,10 @@ import com.ars.discount.impl.DepartAfterReserveStrategy;
 import com.ars.discount.impl.MorningFlightStrategy;
 import com.ars.domain.Ticket;
 
-public class PaymentHandler extends Handler
+public class PaymentHandler extends CommonView
 {
-    private static PaymentHandler instance;
     private Ticket ticket = new Ticket();
-
-    private PaymentHandler()
-    {
-    }
-
-    public static PaymentHandler getInstance()
-    {
-
-        if (instance == null)
-        {
-            instance = new PaymentHandler();
-
-        }
-        return instance;
-    }
-
+    
     @Override
     protected void handleRequest(Ticket ticket)
     {
@@ -39,20 +23,20 @@ public class PaymentHandler extends Handler
         ticketFeePayment();
         this.successor.handleRequest(this.ticket);
     }
-
+    
     private void ticketFeePayment()
     {
         showTicketInfo();
         inputMoney();
     }
-
+    
     private void inputMoney()
     {
         IOUtils.inputTip();
         String input = IOUtils.inputString();
         if (input.equalsIgnoreCase(PREVIOUS))
         {
-            this.setSuccessor(SeatClassHandler.getInstance());
+            this.setSuccessor(new SeatClassHandler());
             return;
         }
         else if (input.equalsIgnoreCase(QUIT))
@@ -79,20 +63,18 @@ public class PaymentHandler extends Handler
                 ticket.setReserveNumber(getReservationNumber());
                 ticket.setTotalMoney(ticket.calculateNormalPrice());
                 ticket.setPromotionPrice(calculatePromotionPrice());
-                this.setSuccessor(ReviewHandler.getInstance());
+                this.setSuccessor(new ReviewHandler());
                 return;
             }
         }
     }
-
+    
     private String getReservationNumber()
     {
-        return ticket.getFlight()
-                + StringUtils.getFirstChar(ticket.getDepartAirport())
-                + StringUtils.getFirstChar(ticket.getArrivalAirport())
-                + DateUtils.currentDateString();
+        return ticket.getFlight() + StringUtils.getFirstChar(ticket.getDepartAirport())
+            + StringUtils.getFirstChar(ticket.getArrivalAirport()) + DateUtils.currentDateString();
     }
-
+    
     private void showTicketInfo()
     {
         printTitle("Payment");
@@ -101,7 +83,7 @@ public class PaymentHandler extends Handler
         printTicketInfo();
         IOUtils.printControlMenu();
     }
-
+    
     private void printTicketInfo()
     {
         println("Flight : " + ticket.getFlight());
@@ -109,31 +91,28 @@ public class PaymentHandler extends Handler
         println("Arrival Airport : " + ticket.getArrivalAirport());
         println("Depart Date : " + ticket.getDepartDate());
         println("Depart Time : " + ticket.getDepartTime());
-        println("Passenger : " + getPassengerNumber(0) + " Adult, "
-                + getPassengerNumber(1) + " Child");
+        println("Passenger : " + getPassengerNumber(0) + " Adult, " + getPassengerNumber(1) + " Child");
         println("Seat Class : " + ticket.getSeatClass());
-        println("Total Amount : " + ticket.calculateNormalPrice().intValue()
-                + " Yuan");
-        println("Promotion Price : " + calculatePromotionPrice().intValue()
-                + " Yuan");
+        println("Total Amount : " + ticket.calculateNormalPrice().intValue() + " Yuan");
+        println("Promotion Price : " + calculatePromotionPrice().intValue() + " Yuan");
         println("");
     }
-
+    
     private int getPassengerNumber(int type)
     {
         return ticket.getPassengerList().get(type).getNumber();
     }
-
+    
     private Double calculatePromotionPrice()
     {
-        List<Double> list = new ArrayList<Double>();
-        list.add(departAfterReserve());
-        list.add(morningFlight());
-        list.add(adultMoreThan4());
-        return Collections.min(list);
+        List<Double> priceList = new ArrayList<Double>();
+        priceList.add(calculateDepartAfterReservePrice());
+        priceList.add(calculateMorningFlightPrice());
+        priceList.add(calculateAdultMoreThan4Price());
+        return Collections.min(priceList);
     }
-
-    private Double adultMoreThan4()
+    
+    private Double calculateAdultMoreThan4Price()
     {
         if (ticket.getPassengerList().get(0).getNumber() >= 4)
         {
@@ -142,8 +121,8 @@ public class PaymentHandler extends Handler
         }
         return ticket.calculateNormalPrice();
     }
-
-    private Double morningFlight()
+    
+    private Double calculateMorningFlightPrice()
     {
         String departTime = ticket.getDepartTime();
         if (departTime.contains(":"))
@@ -156,8 +135,8 @@ public class PaymentHandler extends Handler
         }
         return ticket.calculateNormalPrice();
     }
-
-    private Double departAfterReserve()
+    
+    private Double calculateDepartAfterReservePrice()
     {
         Date departDate = DateUtils.parse2Date(ticket.getDepartDate());
         Date todayDate = DateUtils.currentDate();

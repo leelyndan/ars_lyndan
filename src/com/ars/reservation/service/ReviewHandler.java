@@ -4,26 +4,10 @@ import com.ars.common.util.IOUtils;
 import com.ars.domain.Ticket;
 import com.ars.menu.HomePage;
 
-public class ReviewHandler extends Handler
+public class ReviewHandler extends CommonView
 {
-    private static ReviewHandler instance;
     private Ticket ticket = new Ticket();
-
-    private ReviewHandler()
-    {
-    }
-
-    public static ReviewHandler getInstance()
-    {
-
-        if (instance == null)
-        {
-            instance = new ReviewHandler();
-
-        }
-        return instance;
-    }
-
+    
     @Override
     protected void handleRequest(Ticket ticket)
     {
@@ -33,7 +17,7 @@ public class ReviewHandler extends Handler
         acceptAnyInput();
         HomePage.getInstance().initializeHome();
     }
-
+    
     private void showBillContent()
     {
         printTitle("Review");
@@ -46,18 +30,18 @@ public class ReviewHandler extends Handler
         println("****************************************");
         println("Thank you for reservation!");
     }
-
+    
     private void saveTicket()
     {
         dao.saveTicket(ticket);
     }
-
+    
     private void acceptAnyInput()
     {
         IOUtils.readAnyKey();
         HomePage.getInstance().initializeHome();
     }
-
+    
     private void printTicketInfo()
     {
         println("Flight : " + ticket.getFlight());
@@ -65,16 +49,13 @@ public class ReviewHandler extends Handler
         println("Arrival Airport : " + ticket.getArrivalAirport());
         println("Depart Date : " + ticket.getDepartDate());
         println("Depart Time : " + ticket.getDepartTime());
-        println("Passenger : " + getPassengerNumber(0) + " Adult, "
-                + getPassengerNumber(1) + " Child");
+        println("Passenger : " + getPassengerNumber(0) + " Adult, " + getPassengerNumber(1) + " Child");
         println("Seat Class : " + ticket.getSeatClass());
-        println("Total Amount : " + ticket.calculateNormalPrice().intValue()
-                + " Yuan");
-        println("Promotion Price : " + ticket.getPromotionPrice().intValue()
-                + " Yuan");
+        println("Total Amount : " + ticket.calculateNormalPrice().intValue() + " Yuan");
+        println("Promotion Price : " + ticket.getPromotionPrice().intValue() + " Yuan");
         println("");
     }
-
+    
     private int getPassengerNumber(int type)
     {
         return ticket.getPassengerList().get(type).getNumber();

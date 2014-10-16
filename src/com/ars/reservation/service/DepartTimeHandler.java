@@ -7,27 +7,11 @@ import com.ars.common.util.IOUtils;
 import com.ars.domain.Airline;
 import com.ars.domain.Ticket;
 
-public class DepartTimeHandler extends Handler
+public class DepartTimeHandler extends CommonView
 {
-    private static DepartTimeHandler instance;
+    
     private Ticket ticket = new Ticket();
-
-    private DepartTimeHandler()
-    {
-
-    }
-
-    public static DepartTimeHandler getInstance()
-    {
-
-        if (instance == null)
-        {
-            instance = new DepartTimeHandler();
-
-        }
-        return instance;
-    }
-
+    
     @Override
     protected void handleRequest(Ticket ticket)
     {
@@ -36,16 +20,14 @@ public class DepartTimeHandler extends Handler
         inputDepartTime(departTimeSet);
         this.successor.handleRequest(this.ticket);
     }
-
+    
     private Set<String> selectDepartTime()
     {
         Set<String> arrivalAirportSet = new LinkedHashSet<String>();
         for (Airline airlineInfo : airlineInfos)
         {
-            if (airlineInfo.getDepartAirport()
-                    .equals(ticket.getDepartAirport())
-                    && airlineInfo.getArrivalAirport().equals(
-                            ticket.getArrivalAirport()))
+            if (airlineInfo.getDepartAirport().equals(ticket.getDepartAirport())
+                && airlineInfo.getArrivalAirport().equals(ticket.getArrivalAirport()))
             {
                 arrivalAirportSet.add(airlineInfo.getDepartTime());
             }
@@ -53,14 +35,14 @@ public class DepartTimeHandler extends Handler
         printTipInfo(arrivalAirportSet, "Depart Time");
         return arrivalAirportSet;
     }
-
+    
     private void inputDepartTime(Set<String> departTimeSet)
     {
         IOUtils.inputTip();
         String input = IOUtils.inputString();
         if (input.equalsIgnoreCase(PREVIOUS))
         {
-            this.setSuccessor(DepartDateHandler.getInstance());
+            this.setSuccessor(new DepartDateHandler());
             return;
         }
         else if (input.equalsIgnoreCase(QUIT))
@@ -77,11 +59,11 @@ public class DepartTimeHandler extends Handler
             String setItem = getSetItem(departTimeSet, Integer.parseInt(input));
             if (setItem.equals(ticket.getDepartAirport()))
             {
-                println("ERROR!!! Can¡¯t select the same airport as Departure.");
+                println("ERROR!!! Canï¿½ï¿½t select the same airport as Departure.");
                 inputDepartTime(departTimeSet);
             }
             ticket.setDepartTime(setItem);
-            this.setSuccessor(PassengerHandler.getInstance());
+            this.setSuccessor(new PassengerHandler());
             return;
         }
     }

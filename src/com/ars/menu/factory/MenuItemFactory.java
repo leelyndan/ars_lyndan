@@ -8,24 +8,24 @@ import com.ars.menu.impl.ReservationMenuItem;
 
 public class MenuItemFactory
 {
-
+    
     private static MenuItemFactory instance;
-
+    
     public static MenuItemFactory getInstance()
     {
-
+        
         if (instance == null)
         {
             instance = new MenuItemFactory();
-
+            
         }
         return instance;
     }
-
+    
     private MenuItemFactory()
     {
     }
-
+    
     public IMenuItem createMenuItem(String index)
     {
         if ("1".equals(index))
